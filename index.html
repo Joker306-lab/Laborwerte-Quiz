@@ -2,11 +2,730 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Joker Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 14px 28px;
+}
+.hidden {
+  display: none;
+}
+.header {
+  text-align: center;
+  margin-top: 6px;
+}
+.logo {
+  width: 120px;
+  max-width: 40vw;
+  height: auto;
+  display: block;
+  margin: 0 auto 12px;
+  border-radius: 18px;
+}
+h1 {
+  margin: 8px 0 6px;
+  font-size: 34px;
+}
+.sub {
+  color: #ddd;
+  font-size: 18px;
+  line-height: 1.4;
+}
+.note {
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+.card {
+  background: #1a1a1a;
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 18px;
+}
+.grid {
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.big-btn, .answer-btn, .nav-btn {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.big-btn {
+  background: #fff;
+  color: #111;
+  text-align: left;
+}
+.big-btn.disabled {
+  background: #2b2b2b;
+  color: #999;
+  cursor: default;
+}
+.meta {
+  margin: 14px 0;
+  font-size: 17px;
+  color: #ddd;
+  text-align: center;
+}
+#frage {
+  font-size: 27px;
+  font-weight: bold;
+  margin: 18px 0;
+  line-height: 1.35;
+  text-align: center;
+}
+.answer-btn {
+  background: #fff;
+  color: #111;
+  margin: 10px 0;
+}
+.answer-btn.correct {
+  background: #1f9d55;
+  color: white;
+}
+.answer-btn.wrong {
+  background: #c53030;
+  color: white;
+}
+.answer-btn.disabled {
+  opacity: 0.95;
+  cursor: default;
+}
+#feedback {
+  margin-top: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+#explanation {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #ddd;
+  line-height: 1.5;
+  min-height: 48px;
+  text-align: center;
+}
+#timer {
+  margin-top: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+.nav-btn {
+  background: #2563eb;
+  color: white;
+  margin-top: 14px;
+}
+.nav-btn.secondary {
+  background: #444;
+}
+.small {
+  color: #bbb;
+  font-size: 15px;
+  margin-top: 12px;
+  line-height: 1.4;
+  text-align: center;
+}
+#result {
+  font-size: 21px;
+  line-height: 1.6;
+  text-align: center;
+}
+.badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #262626;
+  color: #ddd;
+  font-size: 14px;
+}
+</style>
 </head>
-<body style="background:#111;color:#fff;text-align:center;font-family:Arial;">
-<h1>Joker Quiz – Laborwerte</h1>
-<p>Wenn du das siehst: Upload hat funktioniert.</p>
+<body>
+<div class="app">
+  <section id="startScreen">
+    <div class="header">
+      <img src="joker.webp" alt="Joker Logo" class="logo">
+      <div class="badge">Joker Quiz</div>
+      <h1>Wissen, bis du in der Praxis zum Joker wirst</h1>
+      <div class="sub">Lernfelder klar getrennt. iPhone und iPad optimiert. Nur Labor ist aktuell befüllt, der Rest ist bewusst vorbereitet.</div>
+      <div class="note">Labor ist fachlich nur aus deiner Übersicht abgeleitet. Medikamente, Algorithmus und Krankheitsbilder sind vorbereitet und folgen sauber getrennt.</div>
+    </div>
+
+    <div class="card">
+      <div class="grid">
+        <button class="big-btn" onclick="startModule('labor')">Laborwerte<br><span style="font-size:14px;color:#666">Normalwerte, pathologisch erhöht, pathologisch erniedrigt, Röhrchen</span></button>
+        <button class="big-btn disabled" type="button">Medikamente<br><span style="font-size:14px;color:#777">folgt</span></button>
+        <button class="big-btn disabled" type="button">Algorithmus<br><span style="font-size:14px;color:#777">folgt</span></button>
+        <button class="big-btn disabled" type="button">Krankheitsbilder<br><span style="font-size:14px;color:#777">folgt</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="quizScreen" class="hidden">
+    <div class="header">
+      <img src="joker.webp" alt="Joker Logo" class="logo" style="width:80px">
+      <div class="badge" id="moduleBadge">Laborwerte</div>
+    </div>
+
+    <div class="card">
+      <div class="meta" id="progress"></div>
+      <div id="frage"></div>
+      <div id="antworten"></div>
+      <div id="feedback"></div>
+      <div id="explanation"></div>
+      <button id="nextBtn" class="nav-btn hidden" onclick="nextQuestion()">Nächste Frage</button>
+      <div id="timer"></div>
+      <div class="small">15 Sekunden pro Frage. Falsch beantwortete oder abgelaufene Fragen kommen hinten wieder, bis alles richtig beantwortet ist.</div>
+      <button class="nav-btn secondary" onclick="goHome()">Zur Startseite</button>
+    </div>
+  </section>
+
+  <section id="resultScreen" class="hidden">
+    <div class="header">
+      <img src="joker.webp" alt="Joker Logo" class="logo">
+      <div class="badge">Ergebnis</div>
+      <h1>Stark</h1>
+    </div>
+    <div class="card">
+      <div id="result"></div>
+      <button class="nav-btn" onclick="restartCurrentModule()">Nochmal spielen</button>
+      <button class="nav-btn secondary" onclick="goHome()">Zur Startseite</button>
+    </div>
+  </section>
+</div>
+
+<script>
+const modules = {
+  labor: {
+    title: "Laborwerte",
+    time: 15,
+    questions: [
+      {
+        frage: "Welches Röhrchen wird für das kleine Blutbild verwendet?",
+        antworten: ["EDTA-Röhrchen", "Citrat-Röhrchen", "Lithium-Heparin-Röhrchen", "BGA-Röhrchen"],
+        richtig: 0,
+        erklaerung: "Auf deiner Übersicht ist das kleine Blutbild dem EDTA-Röhrchen zugeordnet."
+      },
+      {
+        frage: "Welches Röhrchen wird für die Gerinnung verwendet?",
+        antworten: ["EDTA-Röhrchen", "Citrat-Röhrchen", "Lithium-Heparin-Röhrchen", "BGA-Röhrchen"],
+        richtig: 1,
+        erklaerung: "Auf deiner Übersicht ist die Gerinnung dem Citrat-Röhrchen zugeordnet."
+      },
+      {
+        frage: "Welches Röhrchen wird für die klinische Chemie verwendet?",
+        antworten: ["EDTA-Röhrchen", "Citrat-Röhrchen", "Lithium-Heparin-Röhrchen", "BGA-Röhrchen"],
+        richtig: 2,
+        erklaerung: "Auf deiner Übersicht ist die klinische Chemie dem Lithium-Heparin-Röhrchen zugeordnet."
+      },
+      {
+        frage: "Welches Röhrchen wird für Blutgase verwendet?",
+        antworten: ["EDTA-Röhrchen", "Citrat-Röhrchen", "Lithium-Heparin-Röhrchen", "BGA-Röhrchen"],
+        richtig: 3,
+        erklaerung: "Auf deiner Übersicht sind Blutgase dem BGA-Röhrchen zugeordnet."
+      },
+      {
+        frage: "Welcher Normalwertbereich passt zu Leukozyten?",
+        antworten: ["4000 bis 10000 pro µl", "150000 bis 400000 pro µl", "55 bis 130 mg pro dl", "0,9 bis 1,1"],
+        richtig: 0,
+        erklaerung: "Leukozyten: 4000 bis 10000 pro µl."
+      },
+      {
+        frage: "Welcher Normalwertbereich passt zu Thrombozyten?",
+        antworten: ["4000 bis 10000 pro µl", "150000 bis 400000 pro µl", "96 bis 110 mmol pro l", "20 bis 40 s"],
+        richtig: 1,
+        erklaerung: "Thrombozyten: 150000 bis 400000 pro µl."
+      },
+      {
+        frage: "Welcher Hb-Normalwert passt bei Frauen?",
+        antworten: ["12 bis 16 g pro dl", "14 bis 18 g pro dl", "37 bis 54 Prozent", "0,3 bis 3,5 mU pro l"],
+        richtig: 0,
+        erklaerung: "Hb bei Frauen: 12 bis 16 g pro dl."
+      },
+      {
+        frage: "Welcher Hb-Normalwert passt bei Männern?",
+        antworten: ["12 bis 16 g pro dl", "14 bis 18 g pro dl", "37 bis 47 Prozent", "4,4 bis 6,0 Prozent"],
+        richtig: 1,
+        erklaerung: "Hb bei Männern: 14 bis 18 g pro dl."
+      },
+      {
+        frage: "Welcher Hämatokrit-Normalwert passt bei Frauen?",
+        antworten: ["37 bis 47 Prozent", "40 bis 54 Prozent", "70 bis 120 Prozent", "9 bis 16 mg pro dl"],
+        richtig: 0,
+        erklaerung: "Hämatokrit bei Frauen: 37 bis 47 Prozent."
+      },
+      {
+        frage: "Welcher Hämatokrit-Normalwert passt bei Männern?",
+        antworten: ["37 bis 47 Prozent", "40 bis 54 Prozent", "20 bis 40 s", "75 bis 150 mg pro dl"],
+        richtig: 1,
+        erklaerung: "Hämatokrit bei Männern: 40 bis 54 Prozent."
+      },
+      {
+        frage: "Welcher Quick-Wert gilt als normal?",
+        antworten: ["70 bis 120 Prozent", "0,9 bis 1,1", "20 bis 40 s", "200 bis 400 µg pro l"],
+        richtig: 0,
+        erklaerung: "Quick: 70 bis 120 Prozent."
+      },
+      {
+        frage: "Welcher INR-Wert gilt als physiologisch?",
+        antworten: ["70 bis 120 Prozent", "0,9 bis 1,1", "20 bis 40 s", "18 bis 34 mg pro dl"],
+        richtig: 1,
+        erklaerung: "INR: 0,9 bis 1,1."
+      },
+      {
+        frage: "Welcher PTT-Wert ist normal?",
+        antworten: ["20 bis 40 s", "0,9 bis 1,1", "70 bis 120 Prozent", "35 bis 45 mmHg"],
+        richtig: 0,
+        erklaerung: "PTT: 20 bis 40 s."
+      },
+      {
+        frage: "Welcher D-Dimer-Wert liegt im Normbereich?",
+        antworten: ["15 bis 55 mg pro dl", "200 bis 400 µg pro l", "0,6 bis 1,1 mg pro dl", "75 bis 150 mg pro dl"],
+        richtig: 1,
+        erklaerung: "D-Dimer: 200 bis 400 µg pro l."
+      },
+      {
+        frage: "Welcher Albuminwert ist normal?",
+        antworten: ["3,5 bis 5,5 g pro dl", "55 bis 130 mg pro dl", "0,3 bis 3,5 mU pro l", "96 bis 110 mmol pro l"],
+        richtig: 0,
+        erklaerung: "Albumin: 3,5 bis 5,5 g pro dl."
+      },
+      {
+        frage: "Welcher CRP-Wert gilt als normal?",
+        antworten: ["unter 6 mg pro l", "unter 0,5 µg pro l", "unter 100 U pro l", "unter 160 mg pro dl"],
+        richtig: 0,
+        erklaerung: "CRP: unter 6 mg pro l."
+      },
+      {
+        frage: "Welcher Kaliumwert ist physiologisch?",
+        antworten: ["3,6 bis 5,5 mmol pro l", "135 bis 145 mmol pro l", "96 bis 110 mmol pro l", "2,4 bis 7,0 mg pro dl"],
+        richtig: 0,
+        erklaerung: "Kalium: 3,6 bis 5,5 mmol pro l."
+      },
+      {
+        frage: "Welcher Natriumwert ist normal?",
+        antworten: ["135 bis 145 mmol pro l", "3,6 bis 5,5 mmol pro l", "96 bis 110 mmol pro l", "0,75 bis 1,05 mmol pro l"],
+        richtig: 0,
+        erklaerung: "Natrium: 135 bis 145 mmol pro l."
+      },
+      {
+        frage: "Welcher Chloridwert ist normal?",
+        antworten: ["96 bis 110 mmol pro l", "135 bis 145 mmol pro l", "3,6 bis 5,5 mmol pro l", "21 bis 26 mmol pro l"],
+        richtig: 0,
+        erklaerung: "Chlorid: 96 bis 110 mmol pro l."
+      },
+      {
+        frage: "Welcher Calciumwert ist normal?",
+        antworten: ["2,2 bis 2,7 mmol pro l", "0,75 bis 1,05 mmol pro l", "0,77 bis 1,55 mmol pro l", "24 bis 30 mmol pro l"],
+        richtig: 0,
+        erklaerung: "Calcium: 2,2 bis 2,7 mmol pro l."
+      },
+      {
+        frage: "Welcher Magnesiumwert ist normal?",
+        antworten: ["0,75 bis 1,05 mmol pro l", "2,2 bis 2,7 mmol pro l", "0,77 bis 1,55 mmol pro l", "96 bis 110 mmol pro l"],
+        richtig: 0,
+        erklaerung: "Magnesium: 0,75 bis 1,05 mmol pro l."
+      },
+      {
+        frage: "Welcher Phosphatwert ist normal?",
+        antworten: ["0,77 bis 1,55 mmol pro l", "0,75 bis 1,05 mmol pro l", "2,2 bis 2,7 mmol pro l", "3,6 bis 5,5 mmol pro l"],
+        richtig: 0,
+        erklaerung: "Phosphat: 0,77 bis 1,55 mmol pro l."
+      },
+      {
+        frage: "Welcher Glukosewert ist im Normbereich?",
+        antworten: ["55 bis 130 mg pro dl", "135 bis 145 mmol pro l", "3,5 bis 5,5 g pro dl", "0,3 bis 3,5 mU pro l"],
+        richtig: 0,
+        erklaerung: "Glukose: 55 bis 130 mg pro dl."
+      },
+      {
+        frage: "Welcher Kreatininwert ist normal?",
+        antworten: ["0,6 bis 1,1 mg pro dl", "15 bis 55 mg pro dl", "2,4 bis 7,0 mg pro dl", "55 bis 130 mg pro dl"],
+        richtig: 0,
+        erklaerung: "Kreatinin: 0,6 bis 1,1 mg pro dl."
+      },
+      {
+        frage: "Welcher HbA1c-Wert ist normal?",
+        antworten: ["4,4 bis 6,0 Prozent", "70 bis 120 Prozent", "0,9 bis 1,1", "75 bis 150 mg pro dl"],
+        richtig: 0,
+        erklaerung: "HbA1c: 4,4 bis 6,0 Prozent."
+      },
+      {
+        frage: "Welcher pH-Wert ist arteriell oder kapillär normal?",
+        antworten: ["7,35 bis 7,45", "7,36 bis 7,40", "38 bis 45 mmHg", "21 bis 26 mmol pro l"],
+        richtig: 0,
+        erklaerung: "pH arteriell oder kapillär: 7,35 bis 7,45."
+      },
+      {
+        frage: "Welcher pH-Wert ist venös normal?",
+        antworten: ["7,36 bis 7,40", "7,35 bis 7,45", "40 bis 50 mmHg", "24 bis 30 mmol pro l"],
+        richtig: 0,
+        erklaerung: "pH venös: 7,36 bis 7,40."
+      },
+      {
+        frage: "Welcher pCO2-Wert ist arteriell oder kapillär normal?",
+        antworten: ["38 bis 45 mmHg", "40 bis 50 mmHg", "35 bis 45 mmHg", "24 bis 30 mmol pro l"],
+        richtig: 0,
+        erklaerung: "pCO2 arteriell oder kapillär: 38 bis 45 mmHg."
+      },
+      {
+        frage: "Welcher pCO2-Wert ist venös normal?",
+        antworten: ["40 bis 50 mmHg", "38 bis 45 mmHg", "35 bis 45 mmHg", "21 bis 26 mmol pro l"],
+        richtig: 0,
+        erklaerung: "pCO2 venös: 40 bis 50 mmHg."
+      },
+      {
+        frage: "Welche O2-Sättigung ist arteriell oder kapillär normal?",
+        antworten: ["94 bis 98 Prozent", "55 bis 70 Prozent", "70 bis 120 Prozent", "40 bis 54 Prozent"],
+        richtig: 0,
+        erklaerung: "O2-Sättigung arteriell oder kapillär: 94 bis 98 Prozent."
+      },
+      {
+        frage: "Welche O2-Sättigung ist venös normal?",
+        antworten: ["55 bis 70 Prozent", "94 bis 98 Prozent", "37 bis 47 Prozent", "4,4 bis 6,0 Prozent"],
+        richtig: 0,
+        erklaerung: "O2-Sättigung venös: 55 bis 70 Prozent."
+      },
+      {
+        frage: "Welcher BE-Wert ist normal?",
+        antworten: ["minus 3 bis plus 3 mmol pro l", "21 bis 26 mmol pro l", "24 bis 30 mmol pro l", "0,9 bis 1,1"],
+        richtig: 0,
+        erklaerung: "BE: minus 3 bis plus 3 mmol pro l."
+      },
+      {
+        frage: "Welcher HCO3-Wert ist arteriell oder kapillär normal?",
+        antworten: ["21 bis 26 mmol pro l", "24 bis 30 mmol pro l", "minus 3 bis plus 3 mmol pro l", "38 bis 45 mmHg"],
+        richtig: 0,
+        erklaerung: "HCO3 arteriell oder kapillär: 21 bis 26 mmol pro l."
+      },
+      {
+        frage: "Welcher HCO3-Wert ist venös normal?",
+        antworten: ["24 bis 30 mmol pro l", "21 bis 26 mmol pro l", "minus 3 bis plus 3 mmol pro l", "40 bis 50 mmHg"],
+        richtig: 0,
+        erklaerung: "HCO3 venös: 24 bis 30 mmol pro l."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei bakterieller Infektion erhöht sein?",
+        antworten: ["CRP", "Albumin", "TSH basal", "HbA1c"],
+        richtig: 0,
+        erklaerung: "CRP ist bei bakterieller Infektion als erhöht angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Sepsis erhöht sein?",
+        antworten: ["PCT", "Albumin", "TSH basal", "HbA1c"],
+        richtig: 0,
+        erklaerung: "PCT ist bei Sepsis als erhöht angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Diabetes mellitus erhöht sein?",
+        antworten: ["Glukose", "Albumin", "D-Dimer", "AT III"],
+        richtig: 0,
+        erklaerung: "Glukose ist bei Diabetes mellitus als erhöht angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Diabetes mellitus ebenfalls erhöht sein?",
+        antworten: ["HbA1c", "Albumin", "INR", "Leukozyten"],
+        richtig: 0,
+        erklaerung: "HbA1c ist bei Diabetes mellitus als erhöht angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Niereninsuffizienz erhöht sein?",
+        antworten: ["Kreatinin", "Albumin", "TSH basal", "Thrombozyten"],
+        richtig: 0,
+        erklaerung: "Kreatinin ist bei Niereninsuffizienz als erhöht angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei akutem oder chronischem Nierenversagen erhöht sein?",
+        antworten: ["Harnstoff", "Albumin", "CRP", "Troponin T"],
+        richtig: 0,
+        erklaerung: "Harnstoff ist bei akutem oder chronischem Nierenversagen als erhöht angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Gicht erhöht sein?",
+        antworten: ["Harnsäure", "Albumin", "CRP", "TSH basal"],
+        richtig: 0,
+        erklaerung: "Harnsäure ist bei Gicht als erhöht angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei akutem Koronarsyndrom erhöht sein?",
+        antworten: ["Troponin I", "Albumin", "AT III", "HbA1c"],
+        richtig: 0,
+        erklaerung: "Troponin I ist bei akutem Koronarsyndrom als erhöht angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Polyglobulie erhöht sein?",
+        antworten: ["Erythrozyten", "Leukozyten", "Thrombozyten", "CRP"],
+        richtig: 0,
+        erklaerung: "Erythrozyten sind bei Exsikkose, Polycythaemia vera und Polyglobulie erhöht."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei viraler Infektion erniedrigt sein?",
+        antworten: ["Leukozyten", "Albumin", "Kalium", "Glukose"],
+        richtig: 0,
+        erklaerung: "Leukozyten sind bei viraler Infektion als erniedrigt angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Chemotherapie erniedrigt sein?",
+        antworten: ["Leukozyten", "D-Dimer", "Albumin", "TSH basal"],
+        richtig: 0,
+        erklaerung: "Leukozyten sind bei Chemotherapie als erniedrigt angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Eisenmangelanämie erniedrigt sein?",
+        antworten: ["Eisen", "Kalium", "Quick", "CRP"],
+        richtig: 0,
+        erklaerung: "Eisen ist bei Eisenmangelanämie als erniedrigt angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Diuretika-Therapie erniedrigt sein?",
+        antworten: ["Kalium", "Glukose", "Quick", "CRP"],
+        richtig: 0,
+        erklaerung: "Kalium ist bei Erbrechen und Diuretika-Therapie als erniedrigt angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Diuretika-Therapie ebenfalls erniedrigt sein?",
+        antworten: ["Magnesium", "CRP", "HbA1c", "Troponin I"],
+        richtig: 0,
+        erklaerung: "Magnesium ist bei Diuretika-Therapie als erniedrigt angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Erbrechen und Durchfall erniedrigt sein?",
+        antworten: ["Natrium", "CRP", "INR", "Albumin"],
+        richtig: 0,
+        erklaerung: "Natrium ist bei Erbrechen und Durchfall als erniedrigt angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Überdosierung von Insulin erniedrigt sein?",
+        antworten: ["Glukose", "Leukozyten", "Quick", "Albumin"],
+        richtig: 0,
+        erklaerung: "Glukose ist bei Insulinüberdosierung als erniedrigt angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Hyperthyreose erniedrigt sein?",
+        antworten: ["TSH basal", "CRP", "Albumin", "D-Dimer"],
+        richtig: 0,
+        erklaerung: "TSH basal ist bei Hyperthyreose und Morbus Basedow als erniedrigt angegeben."
+      },
+      {
+        frage: "Welcher Wert kann laut Übersicht bei Hypothyreose erhöht sein?",
+        antworten: ["TSH basal", "Kalium", "Albumin", "Leukozyten"],
+        richtig: 0,
+        erklaerung: "TSH basal ist bei Hypothyreose als erhöht angegeben."
+      }
+    ]
+  },
+  medikamente: {
+    title: "Medikamente",
+    time: 15,
+    questions: []
+  },
+  algorithmus: {
+    title: "Algorithmus",
+    time: 15,
+    questions: []
+  },
+  krankheitsbilder: {
+    title: "Krankheitsbilder",
+    time: 15,
+    questions: []
+  }
+};
+
+let activeModuleKey = null;
+let aktiveFragen = [];
+let falschBeantwortet = [];
+let index = 0;
+let punktzahl = 0;
+let timer = null;
+let zeit = 15;
+let beantwortet = false;
+let gesamtGestellt = 0;
+let firstRoundCount = 0;
+
+function show(id) {
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("quizScreen").classList.add("hidden");
+  document.getElementById("resultScreen").classList.add("hidden");
+  document.getElementById(id).classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function startModule(key) {
+  const mod = modules[key];
+  if (!mod || !mod.questions.length) return;
+
+  activeModuleKey = key;
+  aktiveFragen = [...mod.questions];
+  falschBeantwortet = [];
+  index = 0;
+  punktzahl = 0;
+  gesamtGestellt = 0;
+  firstRoundCount = aktiveFragen.length;
+  document.getElementById("moduleBadge").innerText = mod.title;
+  show("quizScreen");
+  zeigeFrage();
+}
+
+function updateProgress() {
+  document.getElementById("progress").innerText =
+    "Direkt richtig: " + punktzahl + " von " + firstRoundCount +
+    " | Aktuelle Runde: Frage " + (index + 1) + " von " + aktiveFragen.length;
+}
+
+function zeigeFrage() {
+  if (index >= aktiveFragen.length) {
+    if (falschBeantwortet.length > 0) {
+      aktiveFragen = [...falschBeantwortet];
+      falschBeantwortet = [];
+      index = 0;
+      alert("Jetzt kommen die falsch beantworteten Fragen erneut.");
+    } else {
+      quizBeenden();
+      return;
+    }
+  }
+
+  beantwortet = false;
+  zeit = modules[activeModuleKey].time;
+  clearInterval(timer);
+  gesamtGestellt++;
+
+  document.getElementById("feedback").innerText = "";
+  document.getElementById("explanation").innerText = "";
+  document.getElementById("nextBtn").classList.add("hidden");
+
+  const frageObj = aktiveFragen[index];
+  document.getElementById("frage").innerText = frageObj.frage;
+
+  const antwortenBox = document.getElementById("antworten");
+  antwortenBox.innerHTML = "";
+
+  frageObj.antworten.forEach((antwort, i) => {
+    const btn = document.createElement("button");
+    btn.innerText = antwort;
+    btn.className = "answer-btn";
+    btn.onclick = () => pruefeAntwort(i);
+    antwortenBox.appendChild(btn);
+  });
+
+  document.getElementById("timer").innerText = "Zeit: " + zeit;
+  updateProgress();
+
+  timer = setInterval(() => {
+    zeit--;
+    document.getElementById("timer").innerText = "Zeit: " + zeit;
+    if (zeit <= 0) {
+      clearInterval(timer);
+      zeitAbgelaufen();
+    }
+  }, 1000);
+}
+
+function pruefeAntwort(auswahl) {
+  if (beantwortet) return;
+  beantwortet = true;
+  clearInterval(timer);
+
+  const frageObj = aktiveFragen[index];
+  const buttons = document.querySelectorAll(".answer-btn");
+
+  buttons.forEach((btn, i) => {
+    btn.classList.add("disabled");
+    if (i === frageObj.richtig) btn.classList.add("correct");
+  });
+
+  if (auswahl === frageObj.richtig) {
+    document.getElementById("feedback").innerText = "Richtig";
+    punktzahl++;
+  } else {
+    buttons[auswahl].classList.add("wrong");
+    document.getElementById("feedback").innerText = "Falsch";
+    falschBeantwortet.push(frageObj);
+  }
+
+  document.getElementById("explanation").innerText =
+    "Richtige Antwort: " + frageObj.antworten[frageObj.richtig] +
+    ". " + (frageObj.erklaerung || "");
+
+  updateProgress();
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+function zeitAbgelaufen() {
+  if (beantwortet) return;
+  beantwortet = true;
+
+  const frageObj = aktiveFragen[index];
+  const buttons = document.querySelectorAll(".answer-btn");
+
+  buttons.forEach((btn, i) => {
+    btn.classList.add("disabled");
+    if (i === frageObj.richtig) btn.classList.add("correct");
+  });
+
+  document.getElementById("feedback").innerText = "Zeit abgelaufen";
+  document.getElementById("explanation").innerText =
+    "Richtige Antwort: " + frageObj.antworten[frageObj.richtig] +
+    ". " + (frageObj.erklaerung || "");
+
+  falschBeantwortet.push(frageObj);
+  updateProgress();
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+function nextQuestion() {
+  index++;
+  zeigeFrage();
+}
+
+function quizBeenden() {
+  clearInterval(timer);
+  const result = document.getElementById("result");
+  const prozent = Math.round((punktzahl / firstRoundCount) * 100);
+
+  result.innerHTML =
+    "<p>Modul: <strong>" + modules[activeModuleKey].title + "</strong></p>" +
+    "<p>Direkt richtig beantwortet: " + punktzahl + " von " + firstRoundCount + "</p>" +
+    "<p>Ergebnis im ersten Durchgang: " + prozent + " Prozent</p>" +
+    "<p>Insgesamt gestellte Fragen inklusive Wiederholungen: " + gesamtGestellt + "</p>" +
+    "<p>Alle falsch beantworteten Fragen wurden wiederholt, bis sie richtig beantwortet waren.</p>";
+
+  show("resultScreen");
+}
+
+function restartCurrentModule() {
+  if (!activeModuleKey) {
+    show("startScreen");
+    return;
+  }
+  startModule(activeModuleKey);
+}
+
+function goHome() {
+  clearInterval(timer);
+  show("startScreen");
+}
+</script>
 </body>
 </html>
