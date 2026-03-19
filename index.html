@@ -234,218 +234,93 @@
   </div>
 
   <script>
-    const originalXabcdeQuestions = [
-      {
-        frage: [
-          "Welches Grundprinzip liegt dem ABCDE-Schema zugrunde?",
-          "Was ist die zentrale Idee hinter ABCDE?",
-          "Woran orientiert sich das ABCDE-Schema zuerst?"
-        ],
-        antworten: [
-          "Zuerst behandeln, was unbehandelt schnell zum Tod führt",
-          "Zuerst alle Vitalwerte exakt messen",
-          "Zuerst den Patienten komplett entkleiden",
-          "Zuerst eine vollständige Anamnese erheben"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Wofür steht A im AVPU-Schema?",
-          "Was bedeutet A bei AVPU?",
-          "Wie ist A im AVPU-Schema definiert?"
-        ],
-        antworten: [
-          "Alert",
-          "Airway",
-          "Apnoe",
-          "Assessment"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Wie reagiert ein Patient mit P im AVPU-Schema?",
-          "Was bedeutet P im AVPU-Schema?",
-          "Welche Reaktion passt zu P nach AVPU?"
-        ],
-        antworten: [
-          "Patient reagiert nur auf Schmerzreiz",
-          "Patient reagiert nur auf laute Ansprache",
-          "Patient ist wach und orientiert",
-          "Patient ist nicht ansprechbar"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Was ist bei U im AVPU-Schema besonders wichtig?",
-          "Welche Maßnahme ist bei U im AVPU-Schema hervorgehoben?",
-          "Worauf weist U im AVPU-Schema direkt hin?"
-        ],
-        antworten: [
-          "Atemweg freimachen",
-          "Sofort EKG schreiben",
-          "Patienten aufsetzen",
-          "Pupillen zuerst kontrollieren"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Worauf weist ein schnarchendes Atemgeräusch hin?",
-          "Was bedeutet schnarchendes Atemgeräusch im A-Problem?",
-          "Welcher Mechanismus steckt hinter einem schnarchenden Atemgeräusch?"
-        ],
-        antworten: [
-          "Tonusverlust der Weichteile im Rachenraum",
-          "Flüssigkeit im Mund-Rachen-Raum",
-          "Komplette Verlegung der oberen Atemwege",
-          "Schwellung der Schleimhäute"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Worauf weist ein gurgelndes oder glucksendes Atemgeräusch hin?",
-          "Was bedeutet gurgelndes Atemgeräusch im Atemweg?",
-          "Welcher Befund passt zu gurgelndem Atemgeräusch?"
-        ],
-        antworten: [
-          "Flüssigkeiten im Mund-Rachen-Raum",
-          "Tonusverlust der Weichteile",
-          "Allergische Schleimhautschwellung",
-          "Normale Atmung"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Wie wird der Atemweg bei einem nicht ansprechbaren Patienten ohne HWS-Verdacht freigemacht?",
-          "Welche Maßnahme ist ohne HWS-Verdacht zur Atemwegssicherung beschrieben?",
-          "Was ist die Standardmaßnahme zur Atemwegfreimachung ohne Verdacht auf HWS-Verletzung?"
-        ],
-        antworten: [
-          "Kopf überstrecken und Kinn anheben",
-          "Nur Esmarch-Handgriff",
-          "Nur Absaugen",
-          "Patient aufsetzen"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Welche Maßnahme ist bei Traumapatienten zur Atemwegfreimachung beschrieben?",
-          "Was wird bei Verdacht auf Wirbelsäulenverletzung angewendet?",
-          "Welche Atemwegstechnik passt zum Traumapatienten?"
-        ],
-        antworten: [
-          "Modifizierter Esmarch-Handgriff",
-          "Kopf maximal überstrecken",
-          "Nur stabile Seitenlage",
-          "Nur Nasopharyngealtubus"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Welche Größe eines Nasopharyngealtubus ist für die meisten Erwachsenen passend?",
-          "Welche Größe passt meist beim Wendl-Tubus für Erwachsene?",
-          "Welche Größenangabe ist für Nasopharyngealtuben bei Erwachsenen beschrieben?"
-        ],
-        antworten: [
-          "6 bis 7 mm ID",
-          "4 bis 5 mm ID",
-          "2 bis 3 mm ID",
-          "9 bis 10 mm ID"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Welche inspiratorische Sauerstoffkonzentration ist für eine Sauerstoffmaske mit Reservoirsystem angegeben?",
-          "Wie hoch ist die inspiratorische Sauerstoffkonzentration bei der Reservoir-Maske?",
-          "Welche Konzentration passt zur Sauerstoffmaske mit Reservoirbeutel?"
-        ],
-        antworten: [
-          "85 bis 90 Prozent",
-          "24 bis 44 Prozent",
-          "35 bis 60 Prozent",
-          "100 Prozent"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Welcher Parameter wird bei der Kontrolle der Atmung laut Testfrage nicht beurteilt?",
-          "Was gehört nicht direkt zur Kontrolle der Atmung?",
-          "Welcher Punkt ist in der Testfrage nicht Teil der Atmungsbeurteilung?"
-        ],
-        antworten: [
-          "Sauerstoffsättigung",
-          "Atemfrequenz",
-          "Atemzugvolumen",
-          "Symmetrische Thoraxbewegungen"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Welche Hautbeschreibung gilt im Material als normal?",
-          "Wie ist normale Haut im C-Teil beschrieben?",
-          "Welche Beschreibung passt zu normaler Haut?"
-        ],
-        antworten: [
-          "Rosig, warm und trocken",
-          "Blass, kühl und feucht",
-          "Zyanotisch und kalt",
-          "Marmoriert und kalt"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Welchen systolischen Blutdruck vermutet man bei gut tastbarem Radialispuls?",
-          "Wofür spricht ein gut tastbarer Puls am Handgelenk ungefähr?",
-          "Welche systolische Druckschwelle wird bei tastbarem Radialispuls genannt?"
-        ],
-        antworten: [
-          "Etwa 90 mmHg systolisch",
-          "Etwa 70 mmHg systolisch",
-          "Etwa 50 mmHg systolisch",
-          "Mindestens 140 mmHg systolisch"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Wie lange darf die Rekapillarisierungszeit bei einem 6-jährigen Kind mit normaler Perfusion dauern?",
-          "Welche Rekapillarisierungszeit gilt beim 6-jährigen Kind als normal?",
-          "Wie lange darf die Rekapillarisierung beim Kind höchstens dauern?"
-        ],
-        antworten: [
-          "2 Sekunden",
-          "5 Sekunden",
-          "10 Sekunden",
-          "20 Sekunden"
-        ],
-        richtig: 0
-      },
-      {
-        frage: [
-          "Wie wird bei lebensbedrohlicher äußerer Blutung vorgegangen?",
-          "Was bedeutet xABCDE bei kritischer Blutung?",
-          "Welche Aussage passt zu xABCDE bei katastrophaler Blutung?"
-        ],
-        antworten: [
-          "Die Blutung wird vor A und B kontrolliert",
-          "Zuerst wird immer regulär mit A begonnen",
-          "Die Blutung wird erst nach dem EKG beurteilt",
-          "Zuerst wird der Patient vollständig entkleidet"
-        ],
-        richtig: 0
-      }
-    ];
+   const originalXabcdeQuestions = [
+
+{frage:["Was hat im ABCDE-Schema oberste Priorität?"],antworten:["Lebensbedrohliche Probleme sofort behandeln","Anamnese erheben","Diagnostik abschließen","Dokumentation"],richtig:0},
+
+{frage:["Was bedeutet A im ABCDE-Schema?"],antworten:["Airway","Assessment","Alert","Airflow"],richtig:0},
+
+{frage:["Was ist das Ziel von A?"],antworten:["Freie Atemwege sicherstellen","Sauerstoff messen","Blutdruck messen","Temperatur messen"],richtig:0},
+
+{frage:["Welches Geräusch spricht für eine Weichteilverlegung?"],antworten:["Schnarchen","Gurgeln","Stridor","Kein Geräusch"],richtig:0},
+
+{frage:["Welches Geräusch spricht für Flüssigkeit im Atemweg?"],antworten:["Gurgeln","Schnarchen","Stille","Pfeifen"],richtig:0},
+
+{frage:["Was ist bei bewusstlosen Patienten erste Maßnahme?"],antworten:["Atemweg sichern","EKG schreiben","Blut abnehmen","Anamnese"],richtig:0},
+
+{frage:["Was bedeutet B?"],antworten:["Breathing","Blood","Brain","Balance"],richtig:0},
+
+{frage:["Was wird bei B primär beurteilt?"],antworten:["Atmung","Puls","Bewusstsein","Temperatur"],richtig:0},
+
+{frage:["Welches Zeichen spricht für Ateminsuffizienz?"],antworten:["Dyspnoe","Bradykardie","Hypertonie","Normale Haut"],richtig:0},
+
+{frage:["Was ist eine typische Maßnahme bei B?"],antworten:["Sauerstoffgabe","Bluttransfusion","EKG schreiben","Anamnese"],richtig:0},
+
+{frage:["Was bedeutet C?"],antworten:["Circulation","Control","Cardio","Core"],richtig:0},
+
+{frage:["Was wird bei C beurteilt?"],antworten:["Kreislauf","Atmung","Bewusstsein","Temperatur"],richtig:0},
+
+{frage:["Was ist ein Schockzeichen?"],antworten:["Kalte blasse Haut","Warme Haut","Rote Haut","Trockene Haut"],richtig:0},
+
+{frage:["Was zeigt eine verlängerte Rekapillarisierungszeit?"],antworten:["Schlechte Perfusion","Gute Perfusion","Normale Haut","Fieber"],richtig:0},
+
+{frage:["Was bedeutet D?"],antworten:["Disability","Diagnosis","Depth","Deficit"],richtig:0},
+
+{frage:["Was wird bei D überprüft?"],antworten:["Neurologischer Status","Blutdruck","Temperatur","EKG"],richtig:0},
+
+{frage:["Welches Schema wird bei D verwendet?"],antworten:["AVPU","ABCDE","NEWS","GCS ausschließlich"],richtig:0},
+
+{frage:["Was bedeutet AVPU?"],antworten:["Alert Voice Pain Unresponsive","Airway Ventilation Perfusion Unit","Alert Value Pulse Unit","Airway Volume Pressure Unit"],richtig:0},
+
+{frage:["Was bedeutet A im AVPU?"],antworten:["Alert","Airway","Apnoe","Assessment"],richtig:0},
+
+{frage:["Was bedeutet V im AVPU?"],antworten:["Reaktion auf Ansprache","Reaktion auf Schmerz","Keine Reaktion","Bewusstlos"],richtig:0},
+
+{frage:["Was bedeutet P im AVPU?"],antworten:["Reaktion auf Schmerz","Reaktion auf Stimme","Wach","Orientiert"],richtig:0},
+
+{frage:["Was bedeutet U im AVPU?"],antworten:["Keine Reaktion","Reaktion auf Schmerz","Reaktion auf Stimme","Wach"],richtig:0},
+
+{frage:["Was bedeutet E?"],antworten:["Exposure","Evaluation","Examination","Emergency"],richtig:0},
+
+{frage:["Was gehört zu E?"],antworten:["Patient vollständig untersuchen","Nur Blutdruck messen","Nur Temperatur messen","Nur Anamnese"],richtig:0},
+
+{frage:["Was bedeutet x im xABCDE?"],antworten:["Massive Blutung stoppen","Atemweg sichern","EKG schreiben","Anamnese"],richtig:0},
+
+{frage:["Wann wird x vorgezogen?"],antworten:["Bei massiver Blutung","Immer","Nie","Nur bei Trauma"],richtig:0},
+
+{frage:["Welche Maßnahme bei starker Blutung?"],antworten:["Direkter Druck","EKG","Sauerstoff","Anamnese"],richtig:0},
+
+{frage:["Was ist ein Ziel des ABCDE?"],antworten:["Strukturierte Priorisierung","Diagnose stellen","Therapie beenden","Dokumentation"],richtig:0},
+
+{frage:["Was passiert wenn ein Problem erkannt wird?"],antworten:["Sofort behandeln","Weiter untersuchen","Warten","Dokumentieren"],richtig:0},
+
+{frage:["Was ist bei instabilen Patienten entscheidend?"],antworten:["Sofort handeln","Warten","Labor abwarten","Röntgen"],richtig:0},
+
+{frage:["Was gehört nicht zu ABCDE?"],antworten:["Anamnese als erster Schritt","Airway","Breathing","Circulation"],richtig:0},
+
+{frage:["Was ist Ziel bei A?"],antworten:["Atemweg frei","Puls messen","Temperatur messen","EKG schreiben"],richtig:0},
+
+{frage:["Was ist Ziel bei B?"],antworten:["Sauerstoffversorgung sichern","Blutdruck messen","Temperatur messen","Anamnese"],richtig:0},
+
+{frage:["Was ist Ziel bei C?"],antworten:["Perfusion sichern","Atmung messen","Bewusstsein prüfen","EKG"],richtig:0},
+
+{frage:["Was ist Ziel bei D?"],antworten:["Neurologischen Status erkennen","Atmung prüfen","Blutdruck messen","EKG"],richtig:0},
+
+{frage:["Was ist Ziel bei E?"],antworten:["Gesamtüberblick gewinnen","Nur Temperatur messen","Nur Puls messen","Nur Anamnese"],richtig:0},
+
+{frage:["Was ist ein Zeichen für Hypoxie?"],antworten:["Zyanose","Rote Haut","Warme Haut","Normale Haut"],richtig:0},
+
+{frage:["Was ist ein Zeichen für Kreislaufversagen?"],antworten:["Hypotonie","Hypertonie","Fieber","Husten"],richtig:0},
+
+{frage:["Was ist bei ABCDE entscheidend?"],antworten:["Reihenfolge einhalten","Alles gleichzeitig","Nur Diagnostik","Nur Therapie"],richtig:0},
+
+{frage:["Wann wird zum nächsten Schritt gewechselt?"],antworten:["Wenn aktuelles Problem behandelt ist","Sofort","Nie","Nur nach EKG"],richtig:0},
+
+{frage:["Was ist ein typischer Fehler?"],antworten:["Diagnostik vor Stabilisierung","Stabilisierung zuerst","Sauerstoffgabe","Monitoring"],richtig:0},
+
+{frage:["Was ist Ziel des gesamten ABCDE?"],antworten:["Überleben sichern","Diagnose stellen","Dokumentieren","Entlassung"],richtig:0}
+
+];
 
     const originalLaborQuestions = [
       {
