@@ -208,9 +208,9 @@
             <span style="font-size:14px;color:#666">Normalwerte, pathologisch erhöht, pathologisch erniedrigt, Röhrchen</span>
           </button>
 
-          <button class="big-btn disabled" type="button">
+          <button class="big-btn" onclick="startModule('medikamente')">
             Medikamente<br>
-            <span style="font-size:14px;color:#777">folgt</span>
+            <span style="font-size:14px;color:#666">Indikationen, Dosierungen, Kontraindikationen, Nebenwirkungen</span>
           </button>
 
           <button class="big-btn disabled" type="button">
@@ -264,7 +264,7 @@
   </div>
 
   <script>
-    const originalQuestions = [
+    const originalLaborQuestions = [
       {
         frage: [
           "Welches Röhrchen wird für das kleine Blutbild verwendet?",
@@ -282,6 +282,24 @@
         ],
         antworten: ["EDTA-Röhrchen", "Citrat-Röhrchen", "Lithium-Heparin-Röhrchen", "BGA-Röhrchen"],
         richtig: 1
+      },
+      {
+        frage: [
+          "Welches Röhrchen wird für die klinische Chemie verwendet?",
+          "Mit welchem Röhrchen wird klinische Chemie abgenommen?",
+          "Welches Abnahmeröhrchen passt zur klinischen Chemie?"
+        ],
+        antworten: ["EDTA-Röhrchen", "Citrat-Röhrchen", "Lithium-Heparin-Röhrchen", "BGA-Röhrchen"],
+        richtig: 2
+      },
+      {
+        frage: [
+          "Welches Röhrchen wird für Blutgase verwendet?",
+          "Mit welchem Röhrchen werden Blutgase bestimmt?",
+          "Welches Abnahmeröhrchen passt zur Blutgasanalyse?"
+        ],
+        antworten: ["EDTA-Röhrchen", "Citrat-Röhrchen", "Lithium-Heparin-Röhrchen", "BGA-Röhrchen"],
+        richtig: 3
       },
       {
         frage: [
@@ -471,23 +489,152 @@
         ],
         antworten: ["4,4 bis 6,0 Prozent", "70 bis 120 Prozent", "0,9 bis 1,1", "75 bis 150 mg pro dl"],
         richtig: 0
-      },
+      }
+    ];
+
+    const originalMedikamentQuestions = [
       {
         frage: [
-          "Welcher pH-Wert ist arteriell oder kapillär normal?",
-          "Welcher Bereich gilt arteriell oder kapillär für den pH als normal?",
-          "Welche Norm passt zum arteriellen oder kapillären pH?"
+          "Wofür wird ASS in der Notaufnahme typischerweise eingesetzt?",
+          "Welche Indikation passt zu ASS?",
+          "Wann ist ASS klassisch angezeigt?"
         ],
-        antworten: ["7,35 bis 7,45", "7,36 bis 7,40", "38 bis 45 mmHg", "21 bis 26 mmol pro l"],
+        antworten: ["Akutes Koronarsyndrom", "Paracetamolintoxikation", "AVNRT", "Anaphylaxie"],
         richtig: 0
       },
       {
         frage: [
-          "Welcher pH-Wert ist venös normal?",
-          "Welcher Bereich gilt venös für den pH als normal?",
-          "Welche Norm passt zum venösen pH?"
+          "Welche ASS-Dosis ist bei akutem Koronarsyndrom in deinem Material angegeben?",
+          "Welche Einzeldosis ASS wird beim ACS genannt?",
+          "Welche ASS-Dosis passt zum akuten Koronarsyndrom?"
         ],
-        antworten: ["7,36 bis 7,40", "7,35 bis 7,45", "40 bis 50 mmHg", "24 bis 30 mmol pro l"],
+        antworten: ["250 mg i.v.", "100 mg i.v.", "6 mg i.v.", "0,5 mg i.m."],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Welche Kontraindikation passt zu ASS?",
+          "Was spricht gegen die Gabe von ASS?",
+          "Welche Situation ist eine Kontraindikation für ASS?"
+        ],
+        antworten: ["Hämorrhagische Diathese", "Paracetamolintoxikation", "AVNRT", "Bronchialsekretstörung"],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Welche Nebenwirkung passt zu ASS?",
+          "Woran musst du bei ASS denken?",
+          "Welche unerwünschte Wirkung ist typisch für ASS?"
+        ],
+        antworten: ["Verlängerung der Blutungszeit", "AV-Block III°", "Hypersalivation", "Tachykardie mit Blutdruckanstieg"],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Wofür wird ACC als Antidot eingesetzt?",
+          "Bei welcher Intoxikation ist ACC klassisch ein Antidot?",
+          "Wann ist ACC als Antidot relevant?"
+        ],
+        antworten: ["Paracetamolintoxikation", "ASS-Überdosierung", "Adenosin-Nebenwirkung", "Anaphylaxie"],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Wie lautet das ACC-Infusionsschema bei Intoxikation im ersten Schritt?",
+          "Welche Initialdosis ACC ist angegeben?",
+          "Mit welcher Dosis startet ACC bei Intoxikation?"
+        ],
+        antworten: ["150 mg/kg KG in 200 ml 5% Glukose über 60 Minuten", "50 mg/kg KG in 500 ml NaCl über 4 Stunden", "100 mg/kg KG in 1000 ml NaCl über 16 Stunden", "250 mg als Bolus i.v."],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Welche Nebenwirkung passt zu ACC?",
+          "Was kann unter ACC auftreten?",
+          "Welche unerwünschte Wirkung ist für ACC beschrieben?"
+        ],
+        antworten: ["Urtikaria", "AV-Block III°", "Hyperglykämie", "Mydriasis"],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Wofür wird Adenosin eingesetzt?",
+          "Welche Indikation passt zu Adenosin?",
+          "Wann wird Adenosin klassisch gegeben?"
+        ],
+        antworten: ["AV-Knoten-Reentry-Tachykardie", "Paracetamolintoxikation", "Akutes Koronarsyndrom", "Fieber"],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Welche Initialdosis Adenosin ist in deinem Material für Erwachsene genannt?",
+          "Wie startest du Adenosin bei Erwachsenen?",
+          "Welche Initialdosis Adenosin ist angegeben?"
+        ],
+        antworten: ["3 mg sehr schnell i.v. als Bolus", "6 mg langsam i.v. über 10 Minuten", "12 mg p.o.", "250 mg i.v."],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Was muss bei Adenosin beachtet werden?",
+          "Welcher Hinweis ist bei Adenosin besonders wichtig?",
+          "Was ist bei der Gabe von Adenosin zwingend?"
+        ],
+        antworten: ["Applikation unter EKG-Kontrolle", "Nur mit Glukose verdünnen", "Nur oral geben", "Vorher ASS geben"],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Welche absolute Kontraindikation ist für Adenosin genannt?",
+          "Wann darf Adenosin nicht gegeben werden?",
+          "Welche Situation ist eine absolute KI für Adenosin?"
+        ],
+        antworten: ["AV-Block II° und III°", "Paracetamolintoxikation", "Akute Schmerzen", "KHK"],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Wofür wird Adrenalin eingesetzt?",
+          "Welche Indikation passt zu Adrenalin?",
+          "Wann ist Adrenalin klassisch angezeigt?"
+        ],
+        antworten: ["Herz-Kreislauf-Stillstand", "AVNRT", "Paracetamolintoxikation", "Chronische Schmerzen"],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Welche Adrenalin-Dosis ist für die Reanimation bei Erwachsenen genannt?",
+          "Welche Initialdosis Adrenalin wird bei Reanimation angegeben?",
+          "Welche Dosis passt zu Adrenalin bei Reanimation?"
+        ],
+        antworten: ["1 mg als Bolus i.v.", "0,1 mg p.o.", "3 mg sehr schnell i.v.", "250 mg i.v."],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Welche Adrenalin-Dosis ist für den anaphylaktischen Schock genannt?",
+          "Welche Dosis passt zu Adrenalin bei Anaphylaxie?",
+          "Wie ist Adrenalin beim anaphylaktischen Schock im Material angegeben?"
+        ],
+        antworten: ["0,5 mg i.m.", "3 mg i.v.", "250 mg i.v.", "100 mg p.o."],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Welche Nebenwirkung passt zu Adrenalin?",
+          "Woran musst du bei Adrenalin denken?",
+          "Welche unerwünschte Wirkung ist für Adrenalin typisch?"
+        ],
+        antworten: ["Tachykarde Rhythmusstörungen", "AV-Block III°", "Urtikaria als Leitsymptom", "Verlängerung der Blutungszeit"],
+        richtig: 0
+      },
+      {
+        frage: [
+          "Welche Wechselwirkung ist für Adrenalin beschrieben?",
+          "Was ist als Wechselwirkung bei Adrenalin genannt?",
+          "Welche Interaktion passt zu Adrenalin?"
+        ],
+        antworten: ["Nicht zusammen mit Natriumhydrogencarbonat über einen Zugang geben", "Nicht mit Penicillinen kombinieren", "Nicht mit Codein kombinieren", "Nicht mit Glyceroltrinitrat kombinieren"],
         richtig: 0
       }
     ];
@@ -496,12 +643,12 @@
       labor: {
         title: "Laborwerte",
         time: 25,
-        questions: originalQuestions
+        questions: originalLaborQuestions
       },
       medikamente: {
         title: "Medikamente",
         time: 25,
-        questions: []
+        questions: originalMedikamentQuestions
       },
       algorithmus: {
         title: "Algorithmus",
