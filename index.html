@@ -573,6 +573,124 @@ richtig: 0
 ];
 const originalMedikamentQuestions = [
 {
+const med = [
+
+{frage:["Patient bradykard → welches Medikament?"],antworten:["Atropin","Adenosin","Diazepam","Amiodaron"],richtig:0},
+{frage:["Startdosis Atropin i.v.?"],antworten:["0,5 mg","5 mg","10 mg","1 mg"],richtig:0},
+{frage:["Maximale Atropin-Dosis?"],antworten:["3 mg","1 mg","10 mg","0,5 mg"],richtig:0},
+{frage:["Gefahr bei zu niedriger Atropin-Dosis?"],antworten:["Paradoxe Bradykardie","Tachykardie","Hypertonie","Asystolie"],richtig:0},
+{frage:["Atropin wirkt über?"],antworten:["Parasympathikus Blockade","Beta-Rezeptor","Kaliumkanal","GABA"],richtig:0},
+
+{frage:["Reanimation, nach 3. Schock → Medikament?"],antworten:["Amiodaron","Atropin","Adenosin","Diazepam"],richtig:0},
+{frage:["Amiodaron Dosis nach 3. Defi?"],antworten:["300 mg","150 mg","1 mg","0,5 mg"],richtig:0},
+{frage:["Amiodaron Repetition?"],antworten:["150 mg","300 mg","50 mg","10 mg"],richtig:0},
+{frage:["Gefahr bei Amiodaron?"],antworten:["QT-Verlängerung","Hypoglykämie","Hypernatriämie","Fieber"],richtig:0},
+{frage:["Typische Nebenwirkung?"],antworten:["Hypotonie","Hypertonie","Fieber","Husten"],richtig:0},
+
+{frage:["Status epilepticus → Medikament?"],antworten:["Diazepam","Adenosin","Atropin","Amiodaron"],richtig:0},
+{frage:["Diazepam i.v. Dosis?"],antworten:["5–10 mg","1 mg","50 mg","0,5 mg"],richtig:0},
+{frage:["Wichtige Nebenwirkung Diazepam?"],antworten:["Atemdepression","Hypertonie","Tachykardie","Fieber"],richtig:0},
+{frage:["Applikation Diazepam?"],antworten:["Langsam i.v.","Bolus schnell","Nur oral","Nur i.m."],richtig:0},
+
+{frage:["AVNRT → Medikament?"],antworten:["Adenosin","Atropin","Diazepam","Amiodaron"],richtig:0},
+{frage:["Startdosis Adenosin?"],antworten:["6 mg","1 mg","10 mg","0,5 mg"],richtig:0},
+{frage:["Zweite Dosis Adenosin?"],antworten:["12 mg","6 mg","3 mg","1 mg"],richtig:0},
+{frage:["Gefahr Adenosin?"],antworten:["Asystolie","Hypertonie","Fieber","Hypoglykämie"],richtig:0},
+{frage:["Wirkdauer Adenosin?"],antworten:["Sehr kurz","Stunden","Tage","Minuten"],richtig:0},
+
+{frage:["Patient tachykard instabil → was zuerst denken?"],antworten:["Rhythmus + Therapie","Labor","CT","Anamnese"],richtig:0},
+{frage:["Bradykardie + Symptomatik → erstes Medikament?"],antworten:["Atropin","Adenosin","Amiodaron","Diazepam"],richtig:0},
+{frage:["Reanimation Rhythmus VF → Medikament?"],antworten:["Amiodaron","Atropin","Diazepam","Adenosin"],richtig:0},
+{frage:["Krampfanfall → erstes Medikament?"],antworten:["Diazepam","Amiodaron","Atropin","Adenosin"],richtig:0},
+{frage:["Supraventrikuläre Tachykardie stabil →?"],antworten:["Adenosin","Atropin","Diazepam","Amiodaron"],richtig:0}
+
+];
+
+let fragen = [];
+let index = 0;
+let timer;
+let time = 25;
+let jokerUsed = false;
+
+function shuffle(arr){
+return arr.sort(()=>Math.random()-0.5);
+}
+
+function start(mod){
+fragen = shuffle([...med]);
+index = 0;
+jokerUsed = false;
+document.getElementById("start").classList.add("hidden");
+document.getElementById("quiz").classList.remove("hidden");
+next();
+}
+
+function next(){
+if(index>=fragen.length){alert("Fertig"); location.reload(); return;}
+
+let f = fragen[index];
+document.getElementById("frage").innerText = f.frage[0];
+
+let box = document.getElementById("answers");
+box.innerHTML="";
+
+let answers = shuffle(f.antworten.map((a,i)=>({a,i})));
+
+answers.forEach(obj=>{
+let btn = document.createElement("button");
+btn.innerText=obj.a;
+btn.className="answer-btn";
+btn.onclick=()=>check(obj.i, f.richtig);
+box.appendChild(btn);
+});
+
+startTimer();
+}
+
+function check(i,r){
+clearInterval(timer);
+let btns=document.querySelectorAll(".answer-btn");
+
+btns.forEach((b,idx)=>{
+if(fragen[index].antworten.indexOf(b.innerText)==r) b.classList.add("correct");
+});
+
+if(i!==r){
+btns.forEach(b=>{
+if(b.innerText==fragen[index].antworten[i]) b.classList.add("wrong");
+});
+}
+
+index++;
+setTimeout(next,1000);
+}
+
+function startTimer(){
+time=25;
+document.getElementById("timer").innerText=time;
+timer=setInterval(()=>{
+time--;
+document.getElementById("timer").innerText=time;
+if(time<=0){clearInterval(timer); index++; next();}
+},1000);
+}
+
+function joker(){
+if(jokerUsed) return;
+jokerUsed=true;
+
+let btns=[...document.querySelectorAll(".answer-btn")];
+let f=fragen[index];
+
+let wrongs=btns.filter(b=>b.innerText!=f.antworten[f.richtig]);
+wrongs[Math.floor(Math.random()*wrongs.length)].style.display="none";
+}
+
+</script>
+</body>
+</html>  
+
+  
 frage: ['ASS wird in der Notaufnahme typischerweise eingesetzt bei?'],
 antworten: ['Akutem Koronarsyndrom','Paracetamolintoxikation','AVNRT','Anaphylaxie'],
 richtig: 0
