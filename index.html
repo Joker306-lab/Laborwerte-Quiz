@@ -50,7 +50,10 @@ body{font-family:Arial,sans-serif;background:#111;color:#fff;margin:0;padding:0}
 <button class="big-btn" onclick="startModule('medikamente')">Medikamente<br><span style="font-size:14px;color:#666">ASS, ACC, Adenosin, Adrenalin, Atropin, Amiodaron, Diazepam</span></button>
 <button class="big-btn" onclick="startModule('ekg')">EKG Kurs<br><span style="font-size:14px;color:#666">Bild sehen, einordnen, befunden</span></button>
 <button class="big-btn" onclick="startModule('drludwig')">Dr. Ludwig<br><span style="font-size:14px;color:#666">Internistischer Patient und Polytrauma aus Sicht der Anästhesie</span></button>
-<button class="big-btn disabled" type="button">Krankheitsbilder<br><span style="font-size:14px;color:#777">folgt</span></button>
+<button class="big-btn" onclick="startModule('miranda')">
+  Miranda de Queiroz<br>
+  <span style="font-size:14px;color:#666">Positionierung, Immobilisation, Stop the Bleed, Beckengurt, Tourniquet</span>
+</button>  <button class="big-btn disabled" type="button">Krankheitsbilder<br><span style="font-size:14px;color:#777">folgt</span></button>
 </div>
 </div>
 </section>
@@ -308,6 +311,32 @@ const originalEkgQuestions = [
 ];
 
 
+const originalMirandaQuestions = [
+{frage:["Welche Maßnahme ist bei persistierender, lebensbedrohlicher Extremitätenblutung nach erfolglosem Druckverband primär indiziert?"],antworten:["Hochlagerung der Extremität über Herzniveau","Anlage eines lockeren Mullverbandes","Anlage eines Tourniquets proximal der Blutung","Sofortige Entfernung aller Koagel aus der Wunde"],richtig:2},
+{frage:["Welche Aussage zur Anlage eines Tourniquets ist korrekt?"],antworten:["Es wird distal der Blutung angelegt","Es darf über Gelenken positioniert werden","Es wird so fest angezogen, bis kein distaler Puls mehr tastbar ist","Es sollte alle 30 Minuten kurz gelöst werden"],richtig:2},
+{frage:["Welche Aussage zur Beckengurt-Anlage ist leitlinienkonform?"],antworten:["Anlage über dem Beckenkamm zur besseren Hebelwirkung","Anlage über dem Trochanter major zur effektiven Beckenringkompression","Anlage nur bei radiologisch gesicherter Fraktur","Anlage erst nach CT-Diagnostik"],richtig:1},
+{frage:["Welche Aussage zur Vakuummatratze ist korrekt?"],antworten:["Sie ist für Langzeitlagerung ungeeignet","Sie ersetzt das Spineboard in der technischen Rettung","Sie ist druckschonender als das Spineboard und für Transport geeignet","Sie darf im CT nicht verwendet werden"],richtig:2},
+{frage:["Welche Konstellation stellt eine absolute Indikation zur Atemwegssicherung im Schockraum dar?"],antworten:["GCS 12 ohne Ateminsuffizienz","GCS 9 mit suffizienter Spontanatmung","GCS kleiner 9","Schmerzangabe über 7 von 10"],richtig:2},
+{frage:["Welche Maßnahme hat im Rahmen der Log-Roll-Technik oberste Priorität?"],antworten:["Schnelligkeit vor Koordination","Führung durch die Person am Becken","Achsengerechte Bewegung unter Führung der Kopf-Person","Drehung durch maximal zwei Personen"],richtig:2},
+{frage:["Im Rahmen des Stop-the-Bleed-Konzepts gilt:"],antworten:["Ein durchgebluteter Druckverband sollte vollständig entfernt und neu angelegt werden","Nach 10 Minuten ineffektiver Kompression sollte grundsätzlich abgewartet werden","Bei Ineffektivität innerhalb weniger Minuten erfolgt Eskalation zur nächsten Stufe","Druckpunkte ersetzen dauerhaft den Druckverband"],richtig:2},
+{frage:["Welche Kombination beschreibt korrekt pathophysiologische Faktoren des tödlichen Diamanten beim Polytrauma?"],antworten:["Hypothermie, Azidose, Koagulopathie, Hypokalzämie","Hyperthermie, Alkalose, Thrombozytose, Hyperkalzämie","Hypoxie, Hyperglykämie, Hypernatriämie, Hypothermie","Bradykardie, Hypotonie, Azidose, Hyperkalzämie"],richtig:0},
+{frage:["Wo wird ein Beckengurt korrekt angelegt?"],antworten:["Über dem Beckenkamm","Über dem Trochanter major","Über dem Bauchnabel","Über der Symphyse alleine"],richtig:1},
+{frage:["Was gilt für die Zeitdokumentation beim Tourniquet?"],antworten:["Nur bei Entlassung notieren","TT-Zeit gut sichtbar dokumentieren","Nur im Arztbrief erwähnen","Erst nach zwei Stunden dokumentieren"],richtig:1},
+{frage:["Welche Aussage zu manueller Kompression ist richtig?"],antworten:["Häufiges Nachschauen ist sinnvoll","Direkter, kontinuierlicher Druck auf die Blutungsquelle","Nur kurz drücken und dann pausieren","Kompression ersetzt jede Re-Evaluation"],richtig:1},
+{frage:["Wie lange soll bei Stufe 1 mindestens kontinuierlich komprimiert werden?"],antworten:["Etwa 1 Minute","Mindestens 10 Minuten","30 Sekunden","Nur bis der Verband vorbereitet ist"],richtig:1},
+{frage:["Was ist ein typischer Fehler bei Stufe 1 der Blutungskontrolle?"],antworten:["Zu frühe Eskalation","Häufiges Anheben der Auflage","Zu frühe Dokumentation","Zu viel Wärmemanagement"],richtig:1},
+{frage:["Was ist bei Hämostyptika wie Chitosan korrekt?"],antworten:["Sie ersetzen den Druckverband vollständig","Sie werden nach kurzer Zeit wieder entfernt","Sie werden in die Wunde eingebracht und mit Druckverband kombiniert","Sie sind nur bei stumpfem Trauma sinnvoll"],richtig:2},
+{frage:["Welche Kontraindikation ist für Chitosan im Material genannt?"],antworten:["Bekannte Allergie gegen Schalentiere","GCS kleiner 9","COPD","Tachykardie"],richtig:0},
+{frage:["Welche Aussage zu Torso-Blutungen ist korrekt?"],antworten:["Tourniquets sind am Rumpf Standard","Am Torso sind Tourniquets anatomisch nicht sinnvoll","Torso-Blutungen werden nur mit Druckpunkten behandelt","Bei Torso-Blutungen darf kein Hämostyptikum genutzt werden"],richtig:1},
+{frage:["Was ist bei einem durchgebluteten ersten Verband sinnvoll?"],antworten:["Alle Materialien entfernen und neu beginnen","Materialreserve bereithalten, zusätzlicher Druck und Re-Evaluation","Verband sofort komplett lockern","Nur fotografisch dokumentieren"],richtig:1},
+{frage:["Welche Aussage zur Log-Roll-Technik passt am besten?"],antworten:["Der Kopf wird zuletzt mitbewegt","Die Kopf-Person führt die achsengerechte Bewegung","Die Becken-Person entscheidet alleine","Die Technik ist nur ohne HWS-Verdacht sinnvoll"],richtig:1},
+{frage:["Welche Aussage zur Atemwegssicherung bei HWS-Verdacht ist korrekt?"],antworten:["Stifneck bleibt immer während der Intubation angelegt","HWS-Neutralstellung sichern, Stifneck abnehmen und manuell stabilisieren","Bei HWS-Verdacht keine Intubation","Traktion am Kopf verbessert die Situation"],richtig:1},
+{frage:["Was gilt laut Material bei Spannungspneumothorax?"],antworten:["Erst Röntgen abwarten","Sofortige Entlastung ohne Röntgen abzuwarten","Nur Sauerstoffgabe","Nur BGA abnehmen"],richtig:1},
+{frage:["Welche Schockzeichen sind im C-Problem genannt?"],antworten:["Hypotonie, Tachykardie, kalte Haut, mentale Veränderung","Nur Fieber und Husten","Nur Hypertonie und Bradykardie","Nur Kopfschmerz und Übelkeit"],richtig:0},
+{frage:["Welche Zugänge werden im C-Problem bevorzugt?"],antworten:["Nur ZVK","2 großlumige periphere Zugänge 14 bis 16G oder IO","Nur arterielle Kanüle","Nur Port"],richtig:1},
+{frage:["Welche Aussage zum Wärmemanagement ist richtig?"],antworten:["Kalte Infusionen sparen Zeit","Hypothermie ist Teil der letalen Trias","Wärmemanagement ist erst nach CT relevant","Raumtemperatur spielt keine Rolle"],richtig:1},
+{frage:["Was gehört zum Exposure-Schritt?"],antworten:["Vollständiges Entkleiden und systematischer Body-Check","Nur Pupillenkontrolle","Nur Blutdruck messen","Nur Sonographie"],richtig:0}
+];
 const originalMirandaQuestions = [
 {frage:["Welche Maßnahme ist bei persistierender, lebensbedrohlicher Extremitätenblutung nach erfolglosem Druckverband primär indiziert?"],antworten:["Hochlagerung der Extremität über Herzniveau","Anlage eines lockeren Mullverbandes","Anlage eines Tourniquets proximal der Blutung","Sofortige Entfernung aller Koagel aus der Wunde"],richtig:2},
 {frage:["Welche Aussage zur Anlage eines Tourniquets ist korrekt?"],antworten:["Es wird distal der Blutung angelegt","Es darf über Gelenken positioniert werden","Es wird so fest angezogen, bis kein distaler Puls mehr tastbar ist","Es sollte alle 30 Minuten kurz gelöst werden"],richtig:2},
